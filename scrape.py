@@ -8,8 +8,8 @@ import uuid
 from hashlib import sha256
 
 
-DATASET_NAME = 'nsfw2'
-INPUT_DIR = '/home/dennis/formatechnologies/nsfw_data_source_urls/raw_data'
+DATASET_NAME = 'nsfw'
+INPUT_DIR = '/home/dennis/formatechnologies/nsfw_data_scraper/raw_data'
 
 
 DATASETS_DIR = '/home/dennis/storage/dennis/datasets'
