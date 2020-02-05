@@ -7,8 +7,12 @@ from tqdm import tqdm
 import uuid
 from hashlib import sha256
 
+
+DATASET_NAME = 'nsfw2'
+INPUT_DIR = '/home/dennis/formatechnologies/nsfw_data_source_urls/raw_data'
+
+
 DATASETS_DIR = '/home/dennis/storage/dennis/datasets'
-DATASET_NAME = 'nsfw'
 
 DATASET_DIR = os.path.join(DATASETS_DIR, DATASET_NAME)
 if not os.path.exists(DATASET_DIR):
@@ -75,8 +79,7 @@ if __name__ == '__main__':
         sys.exit(0)
     signal.signal(signal.SIGINT, signal_handler)
 
-    INPUT_DIR = '/home/dennis/formatechnologies/nsfw_data_scraper/raw_data'
-    for cat in ['drawings', 'hentai', 'neutral', 'porn', 'sexy']:
+    for cat in tqdm(sorted(os.listdir(INPUT_DIR))):
         print(cat)
         cat_dir = os.path.join(DATA_DIR, cat)
         if not os.path.exists(cat_dir):
