@@ -1,4 +1,6 @@
 import os
+import sys
+import signal
 import json
 import requests
 from tqdm import tqdm
@@ -51,12 +53,27 @@ def download_image(url, filename, hashes=[]):
         f.write(r.content)
 
 
-if __name__ == '__main__':
+def load_state():
     with open(PROCESSED_PATH, 'r') as f:
         processed = json.load(f)
-
     with open(HAHES_PATH, 'r') as f:
         hashes = json.load(f)
+    return processed, hashes
+
+
+def save_state(processed, hashes):
+    with open(PROCESSED_PATH, 'w') as f:
+        json.dump(processed, f)
+    with open(HAHES_PATH, 'w') as f:
+        json.dump(hashes, f)
+
+
+if __name__ == '__main__':
+    processed, hashes = load_state()
+    def signal_handler(sig, frame):
+        save_state(processed, hashes)
+        sys.exit(0)
+    signal.signal(signal.SIGINT, signal_handler)
 
     INPUT_DIR = '/home/dennis/formatechnologies/nsfw_data_scraper/raw_data'
     for cat in ['drawings', 'hentai', 'neutral', 'porn', 'sexy']:
@@ -86,7 +103,4 @@ if __name__ == '__main__':
             processed.append(uuid)
 
             if i % 100 == 0 or i == len(uuids) - 1:
-                with open(PROCESSED_PATH, 'w') as f:
-                    json.dump(processed, f)
-                with open(HAHES_PATH, 'w') as f:
-                    json.dump(hashes, f)
+                save_state(processed, hashes)
